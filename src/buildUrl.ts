@@ -9,5 +9,7 @@ export default (item: Definition|string): string => {
 
     // build urls for each type/tag of definition
 
+    // https://www.php.net/manual/en/{lookup_reference}.php
+
     return BASE_URL;
 }
