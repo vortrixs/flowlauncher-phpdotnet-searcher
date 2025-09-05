@@ -1,31 +1,38 @@
-name: Compile plugin
+name: Publish Release
+
 on:
   workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths-ignore: 
+      - .github/workflows/*
 
 jobs:
-    compile_and_publish:
-        runs-on: ubuntu-latest
-        steps:
-          - name: Set up Node.Js
-            uses: actions/setup-node@master
+  publish:
+    runs-on: ubuntu-latest
 
-          - name: get version
-            id: version
-            uses: notiz-dev/github-action-json-property@release
-            with: 
-                path: 'plugin.json'
-                prop_path: 'Version'
+    steps:
+      - uses: actions/checkout@v5
 
+      - name: Set up Node.Js
+        uses: actions/setup-node@v5
 
-          - name: Install dependencies
-            run: |
-                npm install
-                zip -r Flow.Launcher.Plugin.PHPDotNetSearcher.zip . -x '*.git*'
+      - name: get version
+        id: version
+        uses: notiz-dev/github-action-json-property@release
+        with: 
+          path: 'plugin.json'
+          prop_path: 'Version'
 
-          - name: Publish
-            uses: softprops/action-gh-release@v1
-            with:
-              files: 'Flow.Launcher.Plugin.PHPDotNetSearcher.zip'
-              tag_name: "v${{steps.version.outputs.prop}}"
-            env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install dependencies
+        run: |
+          npm install
+          zip -r Flow.Launcher.Plugin.PHPDotNetSearch.zip . -x '*.git*'
+      
+      - name: Publish
+        uses: softprops/action-gh-release@v2
+        with:
+          files: 'Flow.Launcher.Plugin.PHPDotNetSearch.zip'
+          tag_name: "v${{steps.version.outputs.prop}}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
