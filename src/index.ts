@@ -56,10 +56,7 @@ const init = async () => {
       showResult(...results);
   });
 
-  on('open_result', (params) => {
-    const url = params[0];
-    open(url.toString());
-  });
+  on('open_result', (params) => open(params[0].toString()));
 }
 
 init().then(() => run());

@@ -2,14 +2,10 @@ import type { Definition } from './loadPhpDefinitions';
 
 const BASE_URL = 'https://www.php.net';
 
-export default (item: Definition|string): string => {
+export default (item: Definition|string, language: string = 'en'): string => {
     if (typeof item === 'string') {
-        return `${BASE_URL}/search.php?q=${item}`;
+        return `${BASE_URL}/search.php?q=${encodeURIComponent(item)}`;
     }
 
-    // build urls for each type/tag of definition
-
-    // https://www.php.net/manual/en/{lookup_reference}.php
-
-    return BASE_URL;
+    return `${BASE_URL}/manual/${encodeURIComponent(language)}/${encodeURIComponent(item.id)}.php`;
 }
