@@ -1,59 +1,65 @@
 import { Flow, type JSONRPCResponse } from 'flow-launcher-helper'
-import Cache from 'file-system-cache'
-import loadDefinitions from './loadPhpDefinitions';
+import loadDefinitions from './loadPhpDefinitions.js';
 import Fuse from 'fuse.js'
-import buildUrl from './buildUrl';
-
-const cache = Cache({
-    basePath: "./.cache",
-    ttl: 60*60*24*14, // 14 days in seconds
-});
-
-const definitions = await loadDefinitions(cache);
-const fuzzysearch = new Fuse(definitions, {
-    keys: ['name', 'description', 'methodName']
-});
+import buildUrl from './buildUrl.js';
+import { create as createCache} from 'node-file-cache';
+import path from 'node:path';
+import { cwd } from 'process'
+import calculateScore from './calculateScore.js';
 
 type Methods = 'open_result';
 
 const { on, run, showResult } = new Flow<Methods>('php.png');
+const cache = createCache({ file: path.resolve(cwd(), '.cache/cache.db'), life: 60*60*24*14 });
 
-on('query', (params) => {
-    if (params.length <= 1) {
-        return showResult({ title: 'Waiting for query...' });
-    }
+const init = async () => {
+  const definitions = await loadDefinitions(cache);
+  const fuzzysearch = new Fuse(definitions, {
+      keys: ['name', 'description', 'methodName'],
+      includeScore: true,
+      ignoreLocation: true,
+  });
 
-    const data = fuzzysearch.search(params[0].toString());
+  on('query', (params) => {
+      if (params.length <= 1) {
+          return showResult({ title: 'Waiting for query...' });
+      }
 
-    if (0 === data.length) {
-        showResult({
-            title: 'No match found',
-            subtitle: `Search on php.net for ${params}`,
-            method: 'open_result',
-            params: [buildUrl(params[0].toString())],
-            iconPath: 'php.png',
+      const searchQuery = params[0].toString();
+
+      const data = fuzzysearch.search(searchQuery, { limit: 10 });
+
+      if (0 === data.length) {
+          showResult({
+              title: 'No match found',
+              subtitle: `Search on php.net for ${searchQuery}`,
+              method: 'open_result',
+              params: [buildUrl(searchQuery)],
+              iconPath: 'php.png',
+              score: 100,
+          });
+      }
+
+      const results: JSONRPCResponse<Methods>[] = [];
+
+      data.forEach(({ item, score }) => {
+        results.push({
+          title: item.name,
+          subtitle: `${item.type} • ${item.description}`,
+          method: 'open_result',
+          params: [buildUrl(item)],
+          iconPath: 'php.png',
+          score: calculateScore(score ?? 0),
         });
-    }
-
-    const results: JSONRPCResponse<Methods>[] = [];
-
-    data.forEach(({ item, score }) => {
-      results.push({
-        title: item.name,
-        subtitle: `${item.type} • ${item.description}`,
-        method: 'open_result',
-        params: [buildUrl(item)],
-        iconPath: 'php.png',
-        score,
       });
-    });
 
-    showResult(...results);
-});
+      showResult(...results);
+  });
 
-on('open_result', (params) => {
-  const url = params[0];
-  open(url.toString());
-});
+  on('open_result', (params) => {
+    const url = params[0];
+    open(url.toString());
+  });
+}
 
-run();
+init().then(() => run());

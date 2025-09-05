@@ -4,9 +4,11 @@
   "description": "FlowLauncher plugin for looking up functions and classes using php.net's search functionality",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "tsc --watch",
-    "build": "tsc"
+    "watch": "tsc --watch",
+    "build": "tsc",
+    "preview": "tsc && node dist/index.js"
   },
+  "type": "module",
   "author": "Vortrixs",
   "license": "MIT",
   "devDependencies": {
@@ -14,9 +16,11 @@
     "typescript": "^5.9.2"
   },
   "dependencies": {
-    "file-system-cache": "^3.0.0-alpha.8",
+    "@isaacs/ttlcache": "^1.4.1",
+    "file-system-cache": "^3.0.0",
     "flow-launcher-helper": "^2.2.0",
     "fuse.js": "^7.1.0",
+    "node-file-cache": "^1.0.2",
     "open": "^10.2.0"
   }
 }

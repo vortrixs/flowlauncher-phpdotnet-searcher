@@ -1,5 +1,4 @@
-import type { FileSystemCache } from "file-system-cache";
-
+import type { Cache } from 'node-file-cache';
 
 /**
  * Examples:
@@ -51,10 +50,10 @@ const processDefinitions = (index: PhpDefinitionList): Definition[] => Object.en
     })
     .filter((v): v is Definition => Boolean(v));
 
-const loadDefinitions = async (cache: FileSystemCache, language: string = 'en'): Promise<Definition[]> => {
-    const cachedDefinitions: Definition[]|null = await cache.get(language, null);
+const loadDefinitions = async (cache: Cache, language: string = 'en'): Promise<Definition[]> => {
+    const cachedDefinitions: Definition[] = cache.get(language);
 
-    if (null !== cachedDefinitions) {
+    if (cachedDefinitions) {
         return cachedDefinitions;
     }
 
@@ -66,7 +65,7 @@ const loadDefinitions = async (cache: FileSystemCache, language: string = 'en'):
 
     const definitions = processDefinitions(await response.json() as unknown as PhpDefinitionList);
         
-    await cache.set(language, definitions);
+    cache.set(language, definitions);
 
     return definitions;
 }
