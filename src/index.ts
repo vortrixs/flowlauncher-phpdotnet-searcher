@@ -17,7 +17,6 @@ const init = async () => {
   const fuzzysearch = new Fuse(definitions, {
       keys: ['name', 'description', 'methodName'],
       includeScore: true,
-      ignoreLocation: true,
   });
 
   on('query', (params) => {
