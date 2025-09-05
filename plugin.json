@@ -1,0 +1,13 @@
+{
+    "$schema": "https://www.flowlauncher.com/schemas/plugin.schema.json",
+    "ID": "fd5df965-f2e1-4279-b8cc-b76d4975c175",
+    "ActionKeyword": "php",
+    "Name": "PHP Search",
+    "Description": "Search for classes, functions and other documentation on php.net",
+    "Author": "Vortrixs",
+    "Version": "1.0.0",
+    "Language": "typescript",
+    "Website": "https://github.com/vortrixs/flowlauncher-phpdotnet-searcher",
+    "IcoPath": "php.png",
+    "ExecuteFileName": "dist/index.js"
+}
