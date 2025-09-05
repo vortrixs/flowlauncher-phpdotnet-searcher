@@ -20,10 +20,6 @@ const init = async () => {
   });
 
   on('query', (params) => {
-      if (params.length <= 1) {
-          return showResult({ title: 'Waiting for query...' });
-      }
-
       const searchQuery = params[0].toString();
 
       const data = fuzzysearch.search(searchQuery, { limit: 10 });
