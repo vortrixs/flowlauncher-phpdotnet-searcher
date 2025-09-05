@@ -8,6 +8,8 @@ import { cwd } from 'process'
 import calculateScore from './calculateScore.js';
 import open from 'open';
 
+// TODO - try replacing flow-launcher-helper with https://github.com/DrafaKiller/FlowPlugin-ts
+
 type Methods = 'open_result';
 
 const { on, run, showResult } = new Flow<Methods>('php.png');
@@ -31,8 +33,7 @@ const init = async () => {
 
       if (0 === data.length) {
           showResult({
-              title: 'No match found',
-              subtitle: `Search on php.net for ${searchQuery}`,
+              title: 'Search on php.net for ${searchQuery}',
               method: 'open_result',
               params: [buildUrl(searchQuery)],
               iconPath: 'php.png',
@@ -59,4 +60,9 @@ const init = async () => {
   on('open_result', (params) => open(params[0].toString()));
 }
 
-init().then(() => run());
+try {
+  init().then(() => run());  
+} catch (error) {
+  console.log(error);
+  throw new Error(`Error: ${error}`);
+}
