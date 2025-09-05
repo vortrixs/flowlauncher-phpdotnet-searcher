@@ -1,4 +1,5 @@
 import type { Cache } from 'node-file-cache';
+import fetch from 'node-fetch';
 
 /**
  * Examples:
