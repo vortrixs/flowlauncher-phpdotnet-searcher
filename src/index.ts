@@ -6,6 +6,7 @@ import { create as createCache} from 'node-file-cache';
 import path from 'node:path';
 import { cwd } from 'process'
 import calculateScore from './calculateScore.js';
+import open from 'open';
 
 type Methods = 'open_result';
 
@@ -20,6 +21,10 @@ const init = async () => {
   });
 
   on('query', (params) => {
+      if (params.length < 1) {
+          return showResult({ title: 'Waiting for query...' });
+      }
+
       const searchQuery = params[0].toString();
 
       const data = fuzzysearch.search(searchQuery, { limit: 10 });
