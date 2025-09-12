@@ -1,4 +1,4 @@
-import type { Definition } from './loadPhpDefinitions';
+import type { Definition } from './loadPhpDefinitions.js';
 
 const BASE_URL = 'https://www.php.net';
 

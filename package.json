@@ -16,12 +16,9 @@
     "typescript": "^5.9.2"
   },
   "dependencies": {
-    "@isaacs/ttlcache": "^1.4.1",
-    "file-system-cache": "^3.0.0",
-    "flow-launcher-helper": "^2.2.0",
+    "flow-plugin": "^1.4.0",
     "fuse.js": "^7.1.0",
     "node-fetch": "^3.3.2",
-    "node-file-cache": "^1.0.2",
-    "open": "^10.2.0"
+    "node-file-cache": "^1.0.2"
   }
 }
