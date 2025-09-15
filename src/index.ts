@@ -6,10 +6,14 @@ import path from 'node:path';
 import { cwd } from 'process'
 import calculateScore from './calculateScore.js';
 import { type AvailableResult, Flow } from 'flow-plugin';
+import { getLanguageCode, Settings } from './settings.js';
 
 const flow = new Flow({ autoRun: false, keepOrder: true, icon: 'php.png' });
+
+const settings = flow.read().settings as Record<'lang', Settings['lang']>;
+
 const cache = createCache({ file: path.resolve(cwd(), '.cache/cache.db'), life: 60*60*24*14 });
-const definitions = await loadDefinitions(cache);
+const definitions = await loadDefinitions(cache, getLanguageCode(settings));
 const fuzzysearch = new Fuse(definitions, {keys: ['name', 'description', 'methodName'],includeScore: true});
 
 flow.on('query', ({ prompt }, response) => {

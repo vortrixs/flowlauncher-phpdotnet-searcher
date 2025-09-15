@@ -51,7 +51,7 @@ const processDefinitions = (index: PhpDefinitionList): Definition[] => Object.en
     })
     .filter((v): v is Definition => Boolean(v));
 
-const loadDefinitions = async (cache: Cache, language: string = 'en'): Promise<Definition[]> => {
+const loadDefinitions = async (cache: Cache, language: string): Promise<Definition[]> => {
     const cachedDefinitions: Definition[] = cache.get(language);
 
     if (cachedDefinitions) {
