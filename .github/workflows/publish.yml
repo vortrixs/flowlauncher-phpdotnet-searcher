@@ -7,6 +7,9 @@ on:
     paths-ignore: 
       - .github/workflows/*
 
+permissions:
+  contents: write
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -27,6 +30,7 @@ jobs:
       - name: Install dependencies
         run: |
           npm install
+          npm run build
           zip -r Flow.Launcher.Plugin.PHPDotNetSearch.zip . -x '*.git*'
       
       - name: Publish
