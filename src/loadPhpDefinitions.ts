@@ -2,6 +2,9 @@ import type { Cache } from 'node-file-cache';
 import fetch from 'node-fetch';
 
 /**
+ * @see https://www.php.net/js/search.js
+ * @see https://www.php.net/js/search-index.php?lang=en
+ * 
  * Examples:
  * "copyright":["Copyright","PHP Manual","legalnotice"]
  * "function.array-find":["array_find","Returns the first element satisfying a callback function","refentry"]

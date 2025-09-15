@@ -6,24 +6,32 @@ import path from 'node:path';
 import { cwd } from 'process'
 import calculateScore from './calculateScore.js';
 import { type AvailableResult, Flow } from 'flow-plugin';
-import { getLanguageCode, Settings } from './settings.js';
+import Settings from './Settings.js';
 
 const flow = new Flow({ autoRun: false, keepOrder: true, icon: 'php.png' });
-
-const settings = flow.read().settings as Record<'lang', Settings['lang']>;
+const settings = new Settings(flow);
 
 const cache = createCache({ file: path.resolve(cwd(), '.cache/cache.db'), life: 60*60*24*14 });
-const definitions = await loadDefinitions(cache, getLanguageCode(settings));
-const fuzzysearch = new Fuse(definitions, {keys: ['name', 'description', 'methodName'],includeScore: true});
+const definitions = await loadDefinitions(cache, settings.getLanguage());
+const fuzzysearch = new Fuse(definitions, { keys: ['name', 'methodName', 'description'], includeScore: true });
 
 flow.on('query', ({ prompt }, response) => {
-    const data = fuzzysearch.search(prompt, { limit: 10 });
+    if (prompt.trim().length === 0) {
+        return response.add({
+            title: 'Type to search PHP documentation',
+            subtitle: 'You can search by function name, class name, method name, or any keyword',
+            icoPath: 'php.png',
+            score: 100,
+        });
+    }
 
-    if (0 === data.length) {
-        response.add({
+    const data = fuzzysearch.search(prompt.trim(), { limit: 10 });
+
+    if (data.length === 0) {
+        return response.add({
             title: `Search on php.net for ${prompt}`,
             subtitle: 'No results found, click to search on php.net',
-            jsonRPCAction: Flow.Actions.openUrl(buildUrl(prompt)),
+            jsonRPCAction: Flow.Actions.openUrl(buildUrl(prompt.trim(), settings.getLanguage())),
             icoPath: 'php.png',
             score: 100,
         });
@@ -35,13 +43,13 @@ flow.on('query', ({ prompt }, response) => {
       results.push({
         title: item.name,
         subtitle: `${item.type} • ${item.description}`,
-        jsonRPCAction: Flow.Actions.openUrl(buildUrl(item)),
+        jsonRPCAction: Flow.Actions.openUrl(buildUrl(item, settings.getLanguage())),
         icoPath: 'php.png',
         score: calculateScore(score ?? 0),
       });
     });
 
-    response.add(...results);
+    return response.add(...results);
 });
 
 flow.run();
