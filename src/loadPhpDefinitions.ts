@@ -10,7 +10,7 @@ import fetch from 'node-fetch';
  * "function.array-find":["array_find","Returns the first element satisfying a callback function","refentry"]
  * "class.datetimeimmutable":["DateTimeImmutable","The DateTimeImmutable class","phpdoc:classref"]
  */
-type PhpDefinitionList =  {[id:string]: string[]};
+type PhpDefinitionList = {[id:string]: string[]};
 export type Definition = { id: string, name: string, description: string, tag: string, type: string, methodName: string|undefined };
 
 const processDefinitions = (index: PhpDefinitionList): Definition[] => Object.entries(index)
