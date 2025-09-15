@@ -7,7 +7,7 @@ import { cwd } from 'process'
 import calculateScore from './calculateScore.js';
 import { type AvailableResult, Flow } from 'flow-plugin';
 
-const flow = new Flow({ keepOrder: true, icon: 'php.png' });
+const flow = new Flow({ autoRun: false, keepOrder: true, icon: 'php.png' });
 const cache = createCache({ file: path.resolve(cwd(), '.cache/cache.db'), life: 60*60*24*14 });
 const definitions = await loadDefinitions(cache);
 const fuzzysearch = new Fuse(definitions, {keys: ['name', 'description', 'methodName'],includeScore: true});
@@ -39,3 +39,5 @@ flow.on('query', ({ prompt }, response) => {
 
     response.add(...results);
 });
+
+flow.run();
