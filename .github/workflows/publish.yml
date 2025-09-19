@@ -40,7 +40,7 @@ jobs:
         run: |
           cd dist
           mkdir .cache
-          zip -r ../Flow.Launcher.Plugin.PHPDotNetSearch.zip ./*
+          zip -r ../Flow.Launcher.Plugin.PHPDotNetSearch.zip . -i \*
           cd ..
       
       - name: Publish
