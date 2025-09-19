@@ -27,7 +27,7 @@ jobs:
           path: 'plugin.json'
           prop_path: 'Version'
 
-      - name: Install dependencies
+      - name: Install dependencies & build
         run: |
           npm install
           npm run build
@@ -38,7 +38,10 @@ jobs:
           mkdir -p dist/.cache
 
       - name: Create zip
-        run: zip -r Flow.Launcher.Plugin.PHPDotNetSearch.zip ./dist
+        run: |
+          cd dist
+          zip -r ../Flow.Launcher.Plugin.PHPDotNetSearch.zip ./*
+          cd ..
       
       - name: Publish
         uses: softprops/action-gh-release@v2
