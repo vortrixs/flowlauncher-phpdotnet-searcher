@@ -34,11 +34,12 @@ jobs:
 
       - name: Copy static files
         run: |
-          cp -r -t dist/ plugin.json SettingsTemplate.yaml icon.png .cache/.gitkeep
+          cp -t dist/ plugin.json SettingsTemplate.yaml icon.png
 
       - name: Create zip
         run: |
           cd dist
+          mkdir .cache
           zip -r ../Flow.Launcher.Plugin.PHPDotNetSearch.zip ./*
           cd ..
       
