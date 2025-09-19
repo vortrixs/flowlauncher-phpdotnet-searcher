@@ -12,9 +12,6 @@ pids
 *.seed
 *.pid.lock
 
-# Dependency directories
-node_modules/
-
 # TypeScript cache
 *.tsbuildinfo
 
@@ -25,5 +22,12 @@ node_modules/
 .cache/*
 !.cache/.gitkeep
 
-# dist files
-dist/*
+# Dist
+node_modules
+dist/
+storybook-static
+
+# IDE
+.vscode/*
+!.vscode/extensions.json
+.idea

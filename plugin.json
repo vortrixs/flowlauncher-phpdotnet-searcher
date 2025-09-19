@@ -5,9 +5,9 @@
     "Name": "PHP Search",
     "Description": "Search for classes, functions and other documentation on php.net",
     "Author": "Vortrixs",
-    "Version": "1.0.0",
+    "Version": "1.1.0",
     "Language": "typescript",
     "Website": "https://github.com/vortrixs/flowlauncher-phpdotnet-searcher",
-    "IcoPath": "php.png",
-    "ExecuteFileName": "dist/index.js"
+    "IcoPath": "icon.png",
+    "ExecuteFileName": "index.cjs"
 }
