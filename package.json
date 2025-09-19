@@ -1,17 +1,18 @@
 {
   "name": "flowlauncher-phpdotnet-searcher",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "FlowLauncher plugin for looking up functions and classes using php.net's search functionality",
   "main": "dist/index.js",
   "scripts": {
     "watch": "tsc --watch",
-    "build": "tsc",
-    "preview": "tsc && node dist/index.js"
+    "build": "rslib build",
+    "preview": "npm run build && node dist/index.cjs"
   },
   "type": "module",
   "author": "Vortrixs",
   "license": "MIT",
   "devDependencies": {
+    "@rslib/core": "^0.13.3",
     "@types/node": "^24.3.1",
     "typescript": "^5.9.2"
   },
@@ -20,5 +21,6 @@
     "fuse.js": "^7.1.0",
     "node-fetch": "^3.3.2",
     "node-file-cache": "^1.0.2"
-  }
+  },
+  "files": ["dist"]
 }
