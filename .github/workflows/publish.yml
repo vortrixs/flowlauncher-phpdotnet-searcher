@@ -34,8 +34,7 @@ jobs:
 
       - name: Copy static files
         run: |
-          cp -t dist/ plugin.json SettingsTemplate.yaml icon.png
-          mkdir -p dist/.cache
+          cp -t dist/ plugin.json SettingsTemplate.yaml icon.png .cache/
 
       - name: Create zip
         run: |
