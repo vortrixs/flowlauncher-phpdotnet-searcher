@@ -10,49 +10,8 @@ import fetch from 'node-fetch';
  * "function.array-find":["array_find","Returns the first element satisfying a callback function","refentry"]
  * "class.datetimeimmutable":["DateTimeImmutable","The DateTimeImmutable class","phpdoc:classref"]
  */
-type PhpDefinitionList = {[id:string]: string[]};
-export type Definition = { id: string, name: string, description: string, tag: string, type: string, methodName: string|undefined };
 
-const processDefinitions = (index: PhpDefinitionList): Definition[] => Object.entries(index)
-    .map(([id, [name, description, tag]]) => {
-        if (!name) return null;
-
-        let type = "General";
-        
-        switch (tag) {
-            case "phpdoc:varentry":
-                type = "Variable";
-                break;
-
-            case "refentry":
-                type = "Function";
-                break;
-
-            case "phpdoc:exceptionref":
-                type = "Exception";
-                break;
-
-            case "phpdoc:classref":
-                type = "Class";
-                break;
-
-            case "set":
-            case "book":
-            case "reference":
-                type = "Extension";
-                break;
-        }
-
-        return {
-            id,
-            name,
-            description,
-            tag,
-            type,
-            methodName: name.split("::").pop(),
-        };
-    })
-    .filter((v): v is Definition => Boolean(v));
+export type Definition = { id: string, name: string, description: string, tag: string, type: string, methodName: string };
 
 const loadDefinitions = async (cache: Cache, language: string): Promise<Definition[]> => {
     const cachedDefinitions: Definition[] = cache.get(language);
@@ -67,7 +26,7 @@ const loadDefinitions = async (cache: Cache, language: string): Promise<Definiti
         throw new Error(`${response.status} ${response.statusText}`);
     }
 
-    const definitions = processDefinitions(await response.json() as unknown as PhpDefinitionList);
+    const definitions = await response.json() as Definition[];
         
     cache.set(language, definitions);
 

@@ -1,10 +1,9 @@
 {
   "name": "flowlauncher-phpdotnet-searcher",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "FlowLauncher plugin for looking up functions and classes using php.net's search functionality",
   "main": "dist/index.js",
   "scripts": {
-    "watch": "tsc --watch",
     "build": "rslib build",
     "preview": "npm run build && node dist/index.cjs"
   },
